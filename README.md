@@ -10,8 +10,10 @@ All of the code is running in production somewhere(or is about to).
 ## Index
 
 * [java](java) - This code uses a queue for making requests to a REST app
-* [python](python) - Snippets of the REST app which uses producer-consumer pattern
+* [python](python)
+  + [Search Adapter](python/search_adapter) - Snippets of the REST app which uses producer-consumer pattern
 for streaming data from DB to elasticsearch
+  + [Popularity Calculator](python/popularity_calculator) - Script for calculating product popularity based on views, orders etc.
 * [node.js](node.js) - Track system stats using
 [StatsD](https://github.com/etsy/statsd/wiki) from [datadog](https://www.datadoghq.com/)
 * [elasticsearch](elasticsearch)
