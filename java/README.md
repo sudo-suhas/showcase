@@ -21,7 +21,7 @@ is used for pushing databse update requests.
 
 The update request, broadly speaking, has a product id and an entity that needs
 to be updated in elasticsearch. So we use some intelligence to
-[merge requests]((searchadapter/ProductUpdateRequest.java#L37-L53).
+[merge requests](searchadapter/ProductUpdateRequest.java#L37-L53).
 For example, if an update request is already present in the queue for
 the same product but a different entity, we update the entities *only* in the
 same request.
