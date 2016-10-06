@@ -59,6 +59,7 @@ abstract class Processor implements Runnable {
 }
 ```
 </details>
+
 #### HTTPHelper.java
 <details>
     <summary>Click to expand</summary>
@@ -472,6 +473,7 @@ enum RequestTableColumns {
 }
 ```
 </details>
+
 #### Entity Definition
 <details>
     <summary>Click to expand</summary>
