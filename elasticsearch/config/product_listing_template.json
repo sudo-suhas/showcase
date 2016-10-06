@@ -1,0 +1,433 @@
+{
+  "template": "product_listing_v*",
+  "mappings": {
+    "_default_": {
+      "_all": {
+        "enabled": false
+      }
+    },
+    "products": {
+      "_all": {
+        "enabled": false
+      },
+      "properties": {
+        "productSnippet": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "dcs": {
+          "type": "nested",
+          "properties": {
+            "subCategoryName": {
+              "type": "string",
+              "analyzer": "my_simple_analyzer",
+              "fields": {
+                "autocomplete": {
+                  "analyzer": "autocomplete_analyzer",
+                  "search_analyzer": "standard",
+                  "type": "string"
+                },
+                "raw": {
+                  "type": "string",
+                  "index": "not_analyzed"
+                }
+              }
+            },
+            "categoryId": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "isPrimary": {
+              "type": "boolean"
+            },
+            "categoryName": {
+              "type": "string",
+              "analyzer": "my_simple_analyzer",
+              "fields": {
+                "autocomplete": {
+                  "analyzer": "autocomplete_analyzer",
+                  "search_analyzer": "standard",
+                  "type": "string"
+                },
+                "raw": {
+                  "type": "string",
+                  "index": "not_analyzed"
+                }
+              }
+            },
+            "departmentId": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "departmentName": {
+              "type": "string",
+              "analyzer": "my_simple_analyzer",
+              "fields": {
+                "autocomplete": {
+                  "analyzer": "autocomplete_analyzer",
+                  "search_analyzer": "standard",
+                  "type": "string"
+                },
+                "raw": {
+                  "type": "string",
+                  "index": "not_analyzed"
+                }
+              }
+            },
+            "subCategoryId": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "colourFeature": {
+          "type": "string",
+          "fields": {
+            "raw": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "minimumPrice": {
+          "type": "double"
+        },
+        "virtualId": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "materialFeature": {
+          "type": "string",
+          "fields": {
+            "raw": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "sizeApparelFeature": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "productName": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "displayProductName": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "longDesc": {
+          "analyzer": "htmlenglish_analyzer",
+          "type": "string"
+        },
+        "productId": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "photoVersionAttribute": {
+          "type": "integer"
+        },
+        "sizeAgeAbbrevFeature": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "searchableAttribute": {
+          "type": "boolean"
+        },
+        "discountPercent": {
+          "type": "double"
+        },
+        "sizeMaternityFeature": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "sizeChartAttribute": {
+          "properties": {
+            "size_height": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "size_top_length": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "size_waist": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "size_length": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "inseam_top": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "size_toe_heel": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "size_unit": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "size_Waist": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "size_bottom_length": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "size_weight": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "size_hip": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "size_chest": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "size_footwear": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "sizeWristFeature": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "collectionsFeature": {
+          "type": "string",
+          "fields": {
+            "raw": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "searchCategoryId": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "popularity": {
+          "type": "double"
+        },
+        "defaultPrice": {
+          "type": "double"
+        },
+        "virtualGroupingId": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "brandName": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "fromAgeAttribute": {
+          "type": "integer"
+        },
+        "primaryCategoryId": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "sizeRelativeFeature": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "sizeAgeFeature": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "sizeShoesFeature": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "qualifiedProductName": {
+          "analyzer": "english_analyzer",
+          "type": "string",
+          "fields": {
+            "autocomplete": {
+              "analyzer": "autocomplete_analyzer",
+              "search_analyzer": "standard",
+              "type": "string"
+            },
+            "raw": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "shingles": {
+              "analyzer": "shingle_analyzer",
+              "type": "string"
+            }
+          }
+        },
+        "maximumPrice": {
+          "type": "double"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "genderFeature": {
+          "analyzer": "english_analyzer",
+          "type": "string",
+          "fields": {
+            "raw": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "searchCategoryName": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "inStock": {
+          "type": "boolean"
+        },
+        "ageGroup": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "packQuantityFeature": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "discount": {
+          "type": "double"
+        },
+        "introductionDate": {
+          "type": "date",
+          "format": "strict_date_optional_time||epoch_millis"
+        },
+        "boost": {
+          "type": "double"
+        },
+        "brandBoost": {
+          "type": "double"
+        },
+        "shortDesc": {
+          "analyzer": "english_analyzer",
+          "type": "string"
+        },
+        "imageCount": {
+          "type": "integer"
+        },
+        "toAgeAttribute": {
+          "type": "integer"
+        },
+        "sizeDiapersFeature": {
+          "type": "string",
+          "fields": {
+            "raw": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "shingle_analyzer": {
+          "filter": ["lowercase", "shingle_filter"],
+          "tokenizer": "standard",
+          "type": "custom"
+        },
+        "htmlenglish_analyzer": {
+          "filter": [
+            "english_possessive_stemmer", "lowercase", "synonym_filter",
+            "english_stop", "english_keywords", "english_stemmer"
+          ],
+          "tokenizer": "standard",
+          "char_filter": ["html_strip"]
+        },
+        "autocomplete_analyzer": {
+          "filter": ["lowercase", "autocomplete_filter"],
+          "tokenizer": "standard",
+          "type": "custom"
+        },
+        "english_analyzer": {
+          "filter": [
+            "english_possessive_stemmer", "lowercase", "synonym_filter",
+            "english_stop", "english_keywords", "english_stemmer"
+          ],
+          "tokenizer": "standard"
+        },
+        "my_simple_analyzer": {
+          "filter": [
+            "english_possessive_stemmer", "lowercase", "synonym_filter"
+          ],
+          "tokenizer": "standard"
+        }
+      },
+      "filter": {
+        "english_stemmer": {
+          "type": "stemmer",
+          "language": "english"
+        },
+        "synonym_filter": {
+          "synonyms": [
+            "male, boy, boys, man, men, mens => male, boy, man",
+            "female, girl, girls, woman, women, womens => female, girl, woman",
+            "footwear, foot ware => shoes, sandal, slipper, sneaker, boot",
+            "winter wear => winterwear",
+            "inner wear => innerwear",
+            "rainy wear, rain wear => rain coat",
+            "chappal, chapal => slipper",
+            "traditional => traditional, kurta, pyjama, dhoti, modi jacket, anarkali, choli, lehenga, dupatta, gaghra, chudidhar",
+            "short sleeves, short sleeve => shortsleeve",
+            "cap sleeve, cap sleeves => capsleeve",
+            "cradle, cots, cot",
+            "bath tub, bathtub",
+            "cap, hat",
+            "soap, cleansing bar, bubble bath, baby wash, liquid soap",
+            "funky stroller => funkystroller",
+            "car seat, car seats => carseat"
+          ],
+          "type": "synonym"
+        },
+        "autocomplete_filter": {
+          "max_gram": 20,
+          "type": "edge_ngram",
+          "min_gram": 1
+        },
+        "english_keywords": {
+          "type": "keyword_marker",
+          "keywords": ["babyoye", "stroller"]
+        },
+        "english_possessive_stemmer": {
+          "type": "stemmer",
+          "language": "possessive_english"
+        },
+        "shingle_filter": {
+          "max_shingle_size": 2,
+          "type": "shingle",
+          "min_shingle_size": 2,
+          "output_unigrams": false
+        },
+        "english_stop": {
+          "type": "stop",
+          "stopwords": [
+            "a", "an", "and", "are", "as", "at", "be", "but", "by", "for", "if",
+            "in", "into", "is", "it", "of", "on", "or", "such", "that", "the",
+            "their", "then", "there", "these", "they", "this", "to", "was",
+            "will", "with", "wear"
+          ]
+        }
+      }
+    },
+    "index.mapping.coerce": true,
+    "index": {
+      "number_of_shards": 3,
+      "number_of_replicas": 1
+    }
+  }
+}

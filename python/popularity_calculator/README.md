@@ -4,7 +4,7 @@ It takes into account the weightage for the stats based on how old the data is
 and also factors in the popularity percentile for the same.
 If a product had more popularity, it's data will be normalized to account for popularity driven sales/views
 
-It uses [`scipy`](https://www.scipy.org/)'s rankdata for calculating percentiles.
+It uses [`scipy`](https://github.com/scipy/scipy#what-is-scipy)'s rankdata for calculating percentiles.
 
 ## Description
 It queries the database to fetch ~1100000 rows of data for products from the last 60 days.

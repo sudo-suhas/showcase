@@ -1,0 +1,881 @@
+{
+  "inline": {
+    "size": 0,
+    "query": {
+      "function_score": {
+        "query": {
+          "bool": {
+            "should": [{
+              "multi_match": {
+                "query": "{{query_string}}",
+                "fields": [
+                  "qualifiedProductName^1.5",
+                  "qualifiedProductName.shingles"
+                ],
+                "type": "most_fields",
+                "minimum_should_match": "3<65%",
+                "cutoff_frequency": 0.01,
+                "lenient": true,
+                "boost": 24
+              }
+            }, {
+              "nested": {
+                "path": "dcs",
+                "query": {
+                  "multi_match": {
+                    "query": "{{query_string}}",
+                    "fields": [
+                      "dcs.departmentName^8",
+                      "dcs.categoryName^2",
+                      "dcs.subCategoryName"
+                    ],
+                    "type": "best_fields",
+                    "minimum_should_match": "3<75%",
+                    "tie_breaker": 0.3,
+                    "lenient": true,
+                    "boost": 4
+                  }
+                }
+              }
+            }, {
+              "multi_match": {
+                "query": "{{query_string}}",
+                "fields": [
+                  "collectionsFeature^3.5",
+                  "colourFeature^3.5",
+                  "materialFeature^3.5",
+                  "genderFeature^4",
+                  "sizeDiapersFeature^2",
+                  "longDesc"
+                ],
+                "type": "most_fields",
+                "minimum_should_match": "3<20%",
+                "lenient": true,
+                "boost": 2
+              }
+            }, {
+              "bool": {
+                "should": [{
+                  "multi_match": {
+                    "query": "{{query_string}}",
+                    "fields": [
+                      "qualifiedProductName^1.5",
+                      "qualifiedProductName.shingles"
+                    ],
+                    "type": "most_fields",
+                    "minimum_should_match": "3<75%",
+                    "fuzziness": "AUTO",
+                    "cutoff_frequency": 0.01,
+                    "lenient": true,
+                    "boost": 18
+                  }
+                }, {
+                  "nested": {
+                    "path": "dcs",
+                    "query": {
+                      "multi_match": {
+                        "query": "{{query_string}}",
+                        "fields": [
+                          "dcs.departmentName^8",
+                          "dcs.categoryName^4",
+                          "dcs.subCategoryName^2"
+                        ],
+                        "type": "best_fields",
+                        "minimum_should_match": "3<80%",
+                        "tie_breaker": 0.3,
+                        "cutoff_frequency": 0.1,
+                        "fuzziness": "AUTO",
+                        "lenient": true,
+                        "boost": 8
+                      }
+                    }
+                  }
+                }, {
+                  "multi_match": {
+                    "query": "{{query_string}}",
+                    "fields": [
+                      "collectionsFeature^1.5",
+                      "colourFeature^1.5",
+                      "materialFeature^1.5",
+                      "genderFeature^2",
+                      "sizeDiapersFeature^2",
+                      "longDesc"
+                    ],
+                    "type": "most_fields",
+                    "minimum_should_match": "3<40%",
+                    "cutoff_frequency": 0.1,
+                    "fuzziness": "AUTO",
+                    "lenient": true,
+                    "boost": 3
+                  }
+                }],
+                "boost": 0.1
+              }
+            }, {
+              "match": {
+                "productId": {
+                  "query": "{{query_string}}"
+                }
+              }
+            }]
+          }
+        },
+        "filter": {
+          "bool": {
+            "must": [{
+              "exists": {
+                "field": "defaultPrice"
+              }
+            }, {
+              "nested": {
+                "path": "dcs",
+                "filter": {
+                  "bool": {
+                    "must": [{
+                      "term": {
+                        "dcs.departmentName.raw": "Clothes"
+                      }
+                    }]
+                  }
+                }
+              }
+            }],
+            "must_not": [{
+              "term": {
+                "searchableAttribute": false
+              }
+            }, {
+              "term": {
+                "isActive": false
+              }
+            }]
+          }
+        },
+        "score_mode": "sum",
+        "boost_mode": "replace",
+        "functions": [{
+          "script_score": {
+            "script": "10000 * doc['inStock'].value"
+          }
+        }, {
+          "gauss": {
+            "introductionDate": {
+              "scale": "35d",
+              "offset": "15d",
+              "decay": 0.5
+            }
+          },
+          "weight": 2.05
+        }, {
+          "script_score": {
+            "script": "(_score * 40 + ln(1 + (doc['popularity'].value >= 0 ? doc['popularity'].value : 0) * (doc['brandBoost'].value > 0 ? doc['brandBoost'].value : 1))) * ln(1.718282 + (doc['boost'].value > 0 ? doc['boost'].value : 1))",
+            "lang": "expression"
+          }
+        }]
+      }
+    },
+    "aggs": {
+      "totalCountFilter": {
+        "filter": {
+          "bool": {
+            "must": [{
+              "terms": {
+                "brandName": [
+                  "Oye",
+                  "Zero"
+                ]
+              }
+            }, {
+              "terms": {
+                "ageGroup": [
+                  "newborn",
+                  "3-12 months"
+                ]
+              }
+            }, {
+              "terms": {
+                "genderFeature.raw": [
+                  "Boys"
+                ]
+              }
+            }, {
+              "bool": {
+                "should": [{
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 0,
+                      "lte": 500
+                    }
+                  }
+                }, {
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 500,
+                      "lte": 1000
+                    }
+                  }
+                }]
+              }
+            }]
+          }
+        },
+        "aggs": {
+          "totalCount": {
+            "cardinality": {
+              "field": "virtualGroupingId"
+            }
+          }
+        }
+      },
+      "variantGroupingFilter": {
+        "filter": {
+          "bool": {
+            "must": [{
+              "terms": {
+                "brandName": [
+                  "Oye",
+                  "Zero"
+                ]
+              }
+            }, {
+              "terms": {
+                "ageGroup": [
+                  "newborn",
+                  "3-12 months"
+                ]
+              }
+            }, {
+              "terms": {
+                "genderFeature.raw": [
+                  "Boys"
+                ]
+              }
+            }, {
+              "bool": {
+                "should": [{
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 0,
+                      "lte": 500
+                    }
+                  }
+                }, {
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 500,
+                      "lte": 1000
+                    }
+                  }
+                }]
+              }
+            }]
+          }
+        },
+        "aggs": {
+          "variantGrouping": {
+            "terms": {
+              "field": "virtualGroupingId",
+              "size": 120,
+              "order": [{
+                "sort_order": "desc"
+              }]
+            },
+            "aggs": {
+              "variants": {
+                "top_hits": {
+                  "size": 60,
+                  "sort": {
+                    "_script": {
+                      "type": "number",
+                      "lang": "expression",
+                      "script": "_score",
+                      "order": "desc"
+                    }
+                  },
+                  "_source": {
+                    "includes": [
+                      "productId",
+                      "packQuantityFeature",
+                      "defaultPrice",
+                      "imageCount",
+                      "dcs",
+                      "introductionDate",
+                      "maximumPrice",
+                      "discountPercent",
+                      "discount",
+                      "virtualId",
+                      "inStock",
+                      "brandName",
+                      "productName",
+                      "displayProductName",
+                      "sizeRelativeFeature",
+                      "sizeAgeAbbrevFeature",
+                      "sizeDiapersFeature",
+                      "sizeMaternityFeature",
+                      "sizeShoesFeature",
+                      "sizeWristFeature"
+                    ]
+                  }
+                }
+              },
+              "sort_order": {
+                "max": {
+                  "lang": "expression",
+                  "script": "_score"
+                }
+              }
+            }
+          }
+        }
+      },
+      "dcsFilter": {
+        "filter": {
+          "bool": {
+            "must": [{
+              "terms": {
+                "brandName": [
+                  "Oye",
+                  "Zero"
+                ]
+              }
+            }, {
+              "terms": {
+                "ageGroup": [
+                  "newborn",
+                  "3-12 months"
+                ]
+              }
+            }, {
+              "terms": {
+                "genderFeature.raw": [
+                  "Boys"
+                ]
+              }
+            }, {
+              "bool": {
+                "should": [{
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 0,
+                      "lte": 500
+                    }
+                  }
+                }, {
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 500,
+                      "lte": 1000
+                    }
+                  }
+                }]
+              }
+            }]
+          }
+        },
+        "aggs": {
+          "dcs": {
+            "nested": {
+              "path": "dcs"
+            },
+            "aggs": {
+              "departmentName": {
+                "terms": {
+                  "size": 0,
+                  "field": "dcs.departmentName.raw"
+                },
+                "aggs": {
+                  "categoryName": {
+                    "terms": {
+                      "size": 0,
+                      "field": "dcs.categoryName.raw"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "priceRangesFilter": {
+        "filter": {
+          "bool": {
+            "must": [{
+              "terms": {
+                "brandName": [
+                  "Oye",
+                  "Zero"
+                ]
+              }
+            }, {
+              "terms": {
+                "ageGroup": [
+                  "newborn",
+                  "3-12 months"
+                ]
+              }
+            }, {
+              "terms": {
+                "genderFeature.raw": [
+                  "Boys"
+                ]
+              }
+            }]
+          }
+        },
+        "aggs": {
+          "priceRanges": {
+            "histogram": {
+              "field": "defaultPrice",
+              "min_doc_count": 1,
+              "interval": 500
+            }
+          }
+        }
+      },
+      "priceStatsFilter": {
+        "filter": {
+          "bool": {
+            "must": [{
+              "terms": {
+                "brandName": [
+                  "Oye",
+                  "Zero"
+                ]
+              }
+            }, {
+              "terms": {
+                "ageGroup": [
+                  "newborn",
+                  "3-12 months"
+                ]
+              }
+            }, {
+              "terms": {
+                "genderFeature.raw": [
+                  "Boys"
+                ]
+              }
+            }]
+          }
+        },
+        "aggs": {
+          "priceStats": {
+            "stats": {
+              "field": "defaultPrice"
+            }
+          }
+        }
+      },
+      "discountPercentageFilter": {
+        "filter": {
+          "bool": {
+            "must": [{
+              "terms": {
+                "brandName": [
+                  "Oye",
+                  "Zero"
+                ]
+              }
+            }, {
+              "terms": {
+                "ageGroup": [
+                  "newborn",
+                  "3-12 months"
+                ]
+              }
+            }, {
+              "terms": {
+                "genderFeature.raw": [
+                  "Boys"
+                ]
+              }
+            }, {
+              "bool": {
+                "should": [{
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 0,
+                      "lte": 500
+                    }
+                  }
+                }, {
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 500,
+                      "lte": 1000
+                    }
+                  }
+                }]
+              }
+            }]
+          }
+        },
+        "aggs": {
+          "discountPercentage": {
+            "histogram": {
+              "field": "discountPercent",
+              "interval": 10
+            }
+          }
+        }
+      },
+      "brandsFilter": {
+        "filter": {
+          "bool": {
+            "must": [{
+              "terms": {
+                "ageGroup": [
+                  "newborn",
+                  "3-12 months"
+                ]
+              }
+            }, {
+              "terms": {
+                "genderFeature.raw": [
+                  "Boys"
+                ]
+              }
+            }, {
+              "bool": {
+                "should": [{
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 0,
+                      "lte": 500
+                    }
+                  }
+                }, {
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 500,
+                      "lte": 1000
+                    }
+                  }
+                }]
+              }
+            }]
+          }
+        },
+        "aggs": {
+          "brands": {
+            "terms": {
+              "field": "brandName",
+              "size": 0
+            }
+          }
+        }
+      },
+      "coloursFilter": {
+        "filter": {
+          "bool": {
+            "must": [{
+              "terms": {
+                "brandName": [
+                  "Oye",
+                  "Zero"
+                ]
+              }
+            }, {
+              "terms": {
+                "ageGroup": [
+                  "newborn",
+                  "3-12 months"
+                ]
+              }
+            }, {
+              "terms": {
+                "genderFeature.raw": [
+                  "Boys"
+                ]
+              }
+            }, {
+              "bool": {
+                "should": [{
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 0,
+                      "lte": 500
+                    }
+                  }
+                }, {
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 500,
+                      "lte": 1000
+                    }
+                  }
+                }]
+              }
+            }]
+          }
+        },
+        "aggs": {
+          "colours": {
+            "terms": {
+              "field": "colourFeature.raw",
+              "size": 0,
+              "order": [{
+                "_term": "asc"
+              }]
+            }
+          }
+        }
+      },
+      "ageGroupsFilter": {
+        "filter": {
+          "bool": {
+            "must": [{
+              "terms": {
+                "brandName": [
+                  "Oye",
+                  "Zero"
+                ]
+              }
+            }, {
+              "terms": {
+                "genderFeature.raw": [
+                  "Boys"
+                ]
+              }
+            }, {
+              "bool": {
+                "should": [{
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 0,
+                      "lte": 500
+                    }
+                  }
+                }, {
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 500,
+                      "lte": 1000
+                    }
+                  }
+                }]
+              }
+            }]
+          }
+        },
+        "aggs": {
+          "ageGroups": {
+            "terms": {
+              "field": "ageGroup",
+              "size": 0
+            }
+          }
+        }
+      },
+      "gendersFilter": {
+        "filter": {
+          "bool": {
+            "must": [{
+              "terms": {
+                "brandName": [
+                  "Oye",
+                  "Zero"
+                ]
+              }
+            }, {
+              "terms": {
+                "ageGroup": [
+                  "newborn",
+                  "3-12 months"
+                ]
+              }
+            }, {
+              "bool": {
+                "should": [{
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 0,
+                      "lte": 500
+                    }
+                  }
+                }, {
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 500,
+                      "lte": 1000
+                    }
+                  }
+                }]
+              }
+            }]
+          }
+        },
+        "aggs": {
+          "genders": {
+            "terms": {
+              "field": "genderFeature.raw",
+              "size": 0
+            }
+          }
+        }
+      },
+      "collectionsFilter": {
+        "filter": {
+          "bool": {
+            "must": [{
+              "terms": {
+                "brandName": [
+                  "Oye",
+                  "Zero"
+                ]
+              }
+            }, {
+              "terms": {
+                "ageGroup": [
+                  "newborn",
+                  "3-12 months"
+                ]
+              }
+            }, {
+              "terms": {
+                "genderFeature.raw": [
+                  "Boys"
+                ]
+              }
+            }, {
+              "bool": {
+                "should": [{
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 0,
+                      "lte": 500
+                    }
+                  }
+                }, {
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 500,
+                      "lte": 1000
+                    }
+                  }
+                }]
+              }
+            }]
+          }
+        },
+        "aggs": {
+          "collections": {
+            "terms": {
+              "field": "collectionsFeature.raw",
+              "size": 0
+            }
+          }
+        }
+      },
+      "materialsFilter": {
+        "filter": {
+          "bool": {
+            "must": [{
+              "terms": {
+                "brandName": [
+                  "Oye",
+                  "Zero"
+                ]
+              }
+            }, {
+              "terms": {
+                "ageGroup": [
+                  "newborn",
+                  "3-12 months"
+                ]
+              }
+            }, {
+              "terms": {
+                "genderFeature.raw": [
+                  "Boys"
+                ]
+              }
+            }, {
+              "bool": {
+                "should": [{
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 0,
+                      "lte": 500
+                    }
+                  }
+                }, {
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 500,
+                      "lte": 1000
+                    }
+                  }
+                }]
+              }
+            }]
+          }
+        },
+        "aggs": {
+          "materials": {
+            "terms": {
+              "field": "materialFeature.raw",
+              "size": 0
+            }
+          }
+        }
+      },
+      "packQuantitiesFilter": {
+        "filter": {
+          "bool": {
+            "must": [{
+              "terms": {
+                "brandName": [
+                  "Oye",
+                  "Zero"
+                ]
+              }
+            }, {
+              "terms": {
+                "ageGroup": [
+                  "newborn",
+                  "3-12 months"
+                ]
+              }
+            }, {
+              "terms": {
+                "genderFeature.raw": [
+                  "Boys"
+                ]
+              }
+            }, {
+              "bool": {
+                "should": [{
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 0,
+                      "lte": 500
+                    }
+                  }
+                }, {
+                  "range": {
+                    "defaultPrice": {
+                      "gte": 500,
+                      "lte": 1000
+                    }
+                  }
+                }]
+              }
+            }]
+          }
+        },
+        "aggs": {
+          "packQuantities": {
+            "terms": {
+              "field": "packQuantityFeature",
+              "size": 0
+            }
+          }
+        }
+      }
+    }
+  },
+  "params": {
+    "query_string": "pants"
+  }
+}
