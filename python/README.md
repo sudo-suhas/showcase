@@ -15,12 +15,12 @@ The request is validated, inputs parsed and a process is started to stream data 
 
 ## Description
 Depending upon the type of request, appropriate method(
-[`index_all`](module_adapter.py#L200-L210), [`index_entities`](module_adapter.py#L212-L224),
-[`index_doc`](module_adapter.py#L226-L236) or [`update_entities`](module_adapter.py#L238-L251))
+[`index_all`](module_adapter.py#L2199-L209), [`index_entities`](module_adapter.py#L211-L223),
+[`index_doc`](module_adapter.py#L225-L235) or [`update_entities`](module_adapter.py#L237-L250))
 is called in [`module_adapter.py`](module_adapter.py). These methods call
-[`apply_perform_request`](module_adapter.py#L172-L198) which starts a process to
-[perform indexing](module_adapter.pyL66-L170). This method uses a
-[configuration file](#product_listing_def)
+[`apply_perform_request`](module_adapter.py#L171-L197) which starts a process to
+[perform indexing](module_adapter.py#L66-L169). This method uses a
+[configuration file](#product_listing_defjson)
 to discern important details like:
   - How to get the list of document id
   - What is the SQL for a given entity
@@ -36,7 +36,7 @@ These conditions are processed by [`read_from_db`](producer_consumer.py#L72-L140
 However, there is still the issue of loading data into elasticsearch from multiple tables.
 If there were 10 entities, 20K products, we would end up with 200000 rows of results.
 Although elasticsearch can handle upserts, having such a huge number of requests will take a long time to process.
-So I [merge rows](producer_consumer.py#L28-L43) for a given product id down to a single dict.
+So I [merge rows](producer_consumer.py#L38-L43) for a given product id down to a single dict.
 I also take care of multiple rows from the same table.
 
 Example query output from a table with columns `PRODUCT_ID`, `PRODUCT_PRICE_TYPE_ID` and `PRICE`:
