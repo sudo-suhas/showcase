@@ -1,5 +1,5 @@
 # config
-The [configuration](config/product_listing_template.json) I setup for elasticsearch index for products.
+The [configuration](product_listing_template.json) I setup for elasticsearch index for products.
 
 #### Notes
  - It is used for a template and hence all indexes matching the given pattern automatically

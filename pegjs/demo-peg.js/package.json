@@ -1,0 +1,15 @@
+{
+  "name": "demo-peg.js",
+  "version": "0.0.1",
+  "description": "Demo of PEG.js used for parsing where conditions into elasticsearch boolean query using elastic.js",
+  "main": "index.js",
+  "scripts": {
+    "demo": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Suhas Karanth <sudo.suhas@gmail.com>",
+  "dependencies": {
+    "pegjs": "^0.10.0"
+  },
+  "license": "ISC"
+}
