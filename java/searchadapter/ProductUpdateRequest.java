@@ -4,9 +4,6 @@ import java.util.Set;
 
 import org.ofbiz.base.util.UtilValidate;
 
-/**
- * Created by suhas on 1/9/16.
- */
 class ProductUpdateRequest implements Runnable {
     private static final String ADAPTER_MODULE = "product_listing";
     private static final String DOC_TYPE = "products";
@@ -52,7 +49,7 @@ class ProductUpdateRequest implements Runnable {
                         return;
                     }
                 }
-                // https://github.com/sudo-suhas/showcase/blob/master/java/README.md#searchadapterrequest.java
+                // https://github.com/sudo-suhas/showcase/blob/master/java/README.md#searchadapterrequestjava
                 persistedRequest =
                         new SearchAdapterRequest(ADAPTER_MODULE, DOC_TYPE, productId, entity, mode, async);
                 SearchAdapterClient.requestQueue.offer(persistedRequest);

@@ -10,7 +10,7 @@ import org.json.JSONObject;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 
-// https://github.com/sudo-suhas/showcase/blob/master/java/README.md#processor.java
+// https://github.com/sudo-suhas/showcase/blob/master/java/README.md#processorjava
 class AcceptedQueueProcessor extends Processor {
     private static final DateFormat FORMAT = new SimpleDateFormat("MMMM dd, yyyy - hh:mm:ss aa");
 
@@ -23,7 +23,7 @@ class AcceptedQueueProcessor extends Processor {
             if (request != null && UtilValidate.isNotEmpty(request.getReqId())) {
                 HttpGet httpReq = null;
                 try {
-                    // https://github.com/sudo-suhas/showcase/blob/master/java/README.md#routebuilder.java
+                    // https://github.com/sudo-suhas/showcase/blob/master/java/README.md#routebuilderjava
                     final String route = RouteBuilder.builder()
                             .setRoute(SearchAdapterClient.STATUS_ENDPOINT)
                             .setRouteParam("req_id", request.getReqId())

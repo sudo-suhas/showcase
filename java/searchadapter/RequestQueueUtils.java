@@ -13,7 +13,7 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityDateFilterCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 
-// https://github.com/sudo-suhas/showcase/blob/master/java/README.md#requesttablecolumns.java
+// https://github.com/sudo-suhas/showcase/blob/master/java/README.md#requesttablecolumnsjava
 import static com.secret.ecom.elasticsearch.searchadapter.RequestTableColumns.*;
 import static org.ofbiz.entity.condition.EntityCondition.makeCondition;
 import static org.ofbiz.entity.condition.EntityOperator.AND;

@@ -146,7 +146,7 @@ public class SearchAdapterClient {
     static JSONObject executeRequest(HttpRequest request, String errorMsg) throws Exception {
         CloseableHttpClient client = request instanceof HttpEntityEnclosingRequest ?
                 httpClient(postHeaders) : httpClient(getHeaders);
-        //https://github.com/sudo-suhas/showcase/blob/master/java/README.md#httphelper.java
+        //https://github.com/sudo-suhas/showcase/blob/master/java/README.md#httphelperjava
         return HTTPHelper.httpClientResponseJSON(client, targetHost, request, context, errorMsg, 3);
     }
 

@@ -2,28 +2,29 @@
 
 All of this code is runnign inside [ofbiz](http://ofbiz.apache.org/) framework.
 But the version is pretty old. Doesn't matter.
-The framework only comes in for making database calls using an ORM and
-for the application calling 'services' in a 'job sandbox'.
+The framework only comes in for making database calls using an ORM.
 
 ## Short description
-The class takes in requests for updates which need to be triggered against a REST application.
+The [class](searchadapter/SearchAdapterClient.java) takes in requests
+for updates which need to be triggered against a REST application.
 It uses a queue and database for saving the requests and processing one by one.
 
 ## Description
 [Apache HTTP client](https://hc.apache.org/) is used for making the requests.
 The REST app processes requests in async(optional) and returns a request id
 which can be queried for checking the request status.
-So we use 2 queues. [One](java/searchadapter/RequestQueueProcessor.java)
-for requests that are yet to be set to the REST app
-and [another](java/searchadapter/AcceptedQueueProcessor.java)
+So we use 2 queues. [One](searchadapter/RequestQueueProcessor.java)
+for requests that are yet to be sent to the REST app
+and [another](searchadapter/AcceptedQueueProcessor.java)
 for ones which have been accepted. Another queue
 is used for pushing databse update requests.
 
 The update request, broadly speaking, has a product id and an entity that needs
-to be updated in elasticsearch. So we use some intelligence to merge requests.
+to be updated in elasticsearch. So we use some intelligence to
+[merge requests]((searchadapter/ProductUpdateRequest.java#L37-L53).
 For example, if an update request is already present in the queue for
 the same product but a different entity, we update the entities *only* in the
-[same request](java/searchadapter/ProductUpdateRequest.java#L36-L50).
+same request.
 
 ## Other Helper code
 
