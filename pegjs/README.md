@@ -23,6 +23,49 @@ to build a parser for this purpose.
 
 You can check out the demo by running `npm install && npm run demo` inside demo-pegjs.
 You do need node.js and npm to be installed though.
+Console output:
+```
+To keep it simple, I am using a hard-coded condition
+Condition - ((property["flight_passenger_count"] > 81 and property["ticket_booking_mode"] contain "Airport") or (property["discounted_ticket"] is false))
+
+Creating Parser for project id 12345
+Parsing condition using PEG.js
+
+Query -  {
+  "bool": {
+    "should": [
+      {
+        "bool": {
+          "must": [
+            {
+              "range": {
+                "$prj_12345_props.flight_passenger_count": {
+                  "gt": 81
+                }
+              }
+            },
+            {
+              "match": {
+                "$prj_12345_props.ticket_booking_mode": {
+                  "query": "Airport"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "term": {
+          "$prj_12345_props.discounted_ticket": {
+            "term": false
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
 
 ## Notes
  - The parser is not battle tested and there are a few known issues
