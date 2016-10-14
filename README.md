@@ -14,8 +14,11 @@ All of the code is running in production somewhere(or is about to).
   + [Search Adapter](python/search_adapter) - Snippets of the REST app which uses producer-consumer pattern
 for streaming data from DB to elasticsearch
   + [Popularity Calculator](python/popularity_calculator) - Script for calculating product popularity based on views, orders etc.
-* [node.js](node.js) - Track system stats using
-[StatsD](https://github.com/etsy/statsd/wiki) from [datadog](https://www.datadoghq.com/)
+* [node.js](node.js)
+    + [koa-webapp](https://github.com/sudo-suhas/koa-webapp) - Basic Koa webapp with sessions, cookies, authentication and pug.
+    + [Stats Tracking](node.js/track_stats) - Track system stats using
+    [StatsD](https://github.com/etsy/statsd/wiki) from [datadog](https://www.datadoghq.com/)
+    + [Symmetric encryption](node.js/symmetric_encryption) - URL safe encryption decryption
 * [elasticsearch](elasticsearch)
   + [setup](elasticsearch/setup) - How I would setup elasticsearch on linux(some requirements assumed)
   + [config](elasticsearch/config) - The configuration I setup for elasticsearch index for products
